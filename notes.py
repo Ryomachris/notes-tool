@@ -26,18 +26,36 @@ def count_words(text: str) -> int:
 
 def scan_folder(folder: str) -> list[tuple[str, int]]:
     """扫描文件夹，返回每个可读 .md 文件的 (路径, 字数)；读不出的跳过并提示。"""
-    resules = []
+    results = []
     paths = find_md_files(folder)
     texts = [read_text(path) for path in paths]
     for(path, text) in zip(paths, texts):
         if text is None:
             print(f"无法读取文件：{path}")
             continue
-        resules.append((path, count_words(text)))
-    return resules
+        results.append((path, count_words(text)))
+    return results
 
 def print_summary(results: list[tuple[str, int]]) -> None:
     """输出文件数和总字数。"""
     total_files = len(results)
     total_words = sum(word_count for _, word_count in results)
     print(f"文件数：{total_files}，总字数：{total_words}")
+
+def search_keyword(folder: str,keyword: str) -> list[tuple[str, int]]:
+    keyword = keyword.lower().strip()
+    if not keyword:
+        raise ValueError("Keyword cannot be empty.")
+    results = []
+    paths = find_md_files(folder)
+    for path in paths:
+        text = read_text(path)
+        if(text is None):
+            print(f"无法读取文件：{path}")
+            continue
+        else:
+            lines = text.splitlines()
+            for line_number, line in enumerate(lines, start=1):
+                if keyword in line.lower():
+                    results.append((path, line_number))
+    return results
