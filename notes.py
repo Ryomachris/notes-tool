@@ -1,5 +1,5 @@
 from pathlib import Path
-
+import csv
 
 def find_md_files(folder: str) -> list[str]:
     # 你来写：返回 folder 及其子文件夹里所有 .md 文件的路径
@@ -42,7 +42,7 @@ def print_summary(results: list[tuple[str, int]]) -> None:
     total_words = sum(word_count for _, word_count in results)
     print(f"文件数：{total_files}，总字数：{total_words}")
 
-def search_keyword(folder: str,keyword: str) -> list[tuple[str, int]]:
+def search_keyword(folder: str,keyword: str) -> list[tuple[str, int, str]]:
     keyword = keyword.lower().strip()
     if not keyword:
         raise ValueError("Keyword cannot be empty.")
@@ -57,5 +57,15 @@ def search_keyword(folder: str,keyword: str) -> list[tuple[str, int]]:
             lines = text.splitlines()
             for line_number, line in enumerate(lines, start=1):
                 if keyword in line.lower():
-                    results.append((path, line_number))
+                    results.append((path, line_number, line))
     return results
+
+
+def export_csv(
+    results: list[tuple[str, int, str]],
+    output_path: str
+) -> None:
+    with open(output_path, "w", encoding="utf-8-sig", newline="") as file:
+        writer = csv.writer(file)
+        writer.writerow(["文件路径", "行号", "匹配内容"])
+        writer.writerows(results)
