@@ -43,14 +43,18 @@ python main.py --help
 
 ## 运行测试
 
+项目运行本身不需要第三方依赖，但运行自动化测试需要安装 pytest。
+
+安装测试依赖：
+
 ```powershell
-python test_csv.py
+python -m pip install pytest
 ```
 
-如果测试通过，会显示：
+运行测试：
 
-```text
-CSV 导出测试通过
+```powershell
+python -m pytest -v
 ```
 
 ## 注意事项
@@ -60,3 +64,4 @@ CSV 导出测试通过
 - `--output`：可选参数，指定 CSV 输出路径。
 - 可以将 `./test_notes` 替换为自己的笔记文件夹路径。
 - 已存在的 CSV 输出文件会被覆盖。
+
